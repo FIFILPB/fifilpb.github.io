@@ -1,2 +1,343 @@
-# fifilpb.github.io
-VALENTINE
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ma Valentine ♥</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js" crossorigin></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Quicksand', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: #1a0a0a;
+      color: #fff;
+    }
+    .video-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .video-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .video-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(26, 10, 10, 0.7) 0%, rgba(45, 21, 25, 0.65) 50%, rgba(26, 10, 10, 0.7) 100%);
+      pointer-events: none;
+    }
+    #root {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .hearts-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .heart-float {
+      position: absolute;
+      font-size: 20px;
+      opacity: 0.15;
+      animation: float 8s ease-in-out infinite;
+    }
+    .heart-float:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .heart-float:nth-child(2) { left: 25%; animation-delay: 1s; }
+    .heart-float:nth-child(3) { left: 40%; animation-delay: 2s; }
+    .heart-float:nth-child(4) { left: 60%; animation-delay: 3s; }
+    .heart-float:nth-child(5) { left: 75%; animation-delay: 4s; }
+    .heart-float:nth-child(6) { left: 90%; animation-delay: 5s; }
+    @keyframes float {
+      0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.15; }
+      90% { opacity: 0.15; }
+      100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+    .card {
+      background: linear-gradient(160deg, rgba(139, 28, 58, 0.4) 0%, rgba(80, 20, 40, 0.6) 100%);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 182, 193, 0.2);
+      border-radius: 24px;
+      padding: clamp(28px, 6vw, 48px);
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 60px rgba(255, 105, 180, 0.1);
+    }
+    .card h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 4vw, 1.8rem);
+      font-weight: 600;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, #ffb6c1, #ff69b4, #ffb6c1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.3;
+    }
+    .card .sub {
+      font-size: clamp(0.85rem, 2.5vw, 1rem);
+      color: rgba(255, 182, 193, 0.9);
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+    .card-img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 182, 193, 0.4);
+      margin: 0 auto 24px;
+      display: block;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      min-height: 52px;
+    }
+    .btn {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:active {
+      transform: scale(0.96);
+    }
+    .btn-yes {
+      background: linear-gradient(135deg, #e91e63, #c2185b);
+      color: white;
+      box-shadow: 0 8px 24px rgba(233, 30, 99, 0.4);
+    }
+    .btn-yes:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 32px rgba(233, 30, 99, 0.5);
+    }
+    .btn-no {
+      background: rgba(255,255,255,0.15);
+      color: #ffb6c1;
+      border: 1px solid rgba(255,182,193,0.4);
+    }
+    .celebration {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .celebration-heart {
+      position: absolute;
+      font-size: 28px;
+      animation: pop 1.2s ease-out forwards;
+      opacity: 0;
+    }
+    @keyframes pop {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.2);
+      }
+      100% {
+        opacity: 0.8;
+        transform: translate(var(--tx), var(--ty)) scale(1);
+      }
+    }
+    .message-success {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: rgba(255, 182, 193, 0.95);
+      margin-top: 16px;
+      font-style: italic;
+      animation: fadeIn 0.6s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .valentine-date {
+      font-size: 0.8rem;
+      color: rgba(255,182,193,0.6);
+      margin-top: 6px;
+    }
+    .card-full-img {
+      width: 100%;
+      display: block;
+      border-radius: 16px;
+      object-fit: cover;
+      min-height: 280px;
+      margin: 0;
+    }
+    .message-no {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: rgba(255, 182, 193, 0.95);
+      margin-top: 16px;
+      font-style: italic;
+      animation: fadeIn 0.6s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="video-bg">
+    <video autoplay loop muted playsinline>
+      <source src="fond.mp4" type="video/mp4">
+    </video>
+    <div class="video-bg-overlay" aria-hidden="true"></div>
+  </div>
+  <div id="root"></div>
+  <script type="text/babel" data-presets="react">
+    const { useState, useRef, useCallback } = React;
+
+    function HeartsBg() {
+      return (
+        <div className="hearts-bg" aria-hidden="true">
+          {['♥', '♥', '♥', '♥', '♥', '♥'].map((h, i) => (
+            <span key={i} className="heart-float" style={{ animationDelay: `${i}s` }}>{h}</span>
+          ))}
+        </div>
+      );
+    }
+
+    function App() {
+      const [choice, setChoice] = useState(null);
+      const [celebrationHearts, setCelebrationHearts] = useState([]);
+      const cardRef = useRef(null);
+
+      const defaultImg = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23ff69b4" d="M50 85C20 60 5 40 5 25c0-12 10-20 22-20 12 0 23 8 23 8s11-8 23-8c12 0 22 8 22 20 0 15-15 35-45 60z"/></svg>');
+
+      const handleYes = useCallback(() => {
+        setChoice('yes');
+        const hearts = [];
+        for (let i = 0; i < 18; i++) {
+          hearts.push({
+            id: i,
+            left: Math.random() * 100,
+            top: Math.random() * 100,
+            tx: (Math.random() - 0.5) * 200,
+            ty: (Math.random() - 0.5) * 200
+          });
+        }
+        setCelebrationHearts(hearts);
+        setTimeout(() => setCelebrationHearts([]), 1400);
+      }, []);
+
+      const handleNo = useCallback(() => {
+        setChoice('no');
+      }, []);
+
+      return (
+        <>
+          <HeartsBg />
+          {celebrationHearts.map(({ id, left, top, tx, ty }) => (
+            <span
+              key={id}
+              className="celebration-heart"
+              style={{
+                left: `${left}%`,
+                top: `${top}%`,
+                '--tx': `${tx}px`,
+                '--ty': `${ty}px`
+              }}
+            >
+              ♥
+            </span>
+          ))}
+          <div className="card" ref={cardRef}>
+            {choice === null && (
+              <>
+                <p className="valentine-date">POUR ANNA PELLEN</p>
+                <h1>tieu veux être ma valentine ?</h1>
+                <p className="sub">(Je crois que la réponse est vite choisie)</p>
+
+                <img
+                  className="card-img"
+                  src="image.jpg"
+                  alt=""
+                  onError={(e) => { e.target.onerror = null; e.target.src = defaultImg; }}
+                />
+
+                <div className="buttons">
+                  <button
+                    type="button"
+                    className="btn btn-yes"
+                    onClick={handleYes}
+                  >
+                    Oui
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-no"
+                    onClick={handleNo}
+                  >
+                    Non
+                  </button>
+                </div>
+              </>
+            )}
+
+            {choice === 'no' && (
+              <>
+                <img
+                  className="card-full-img"
+                  src="chatnon.jpg"
+                  alt=""
+                />
+                <p className="message-no">ti aura pas cette rose vilaine</p>
+              </>
+            )}
+
+            {choice === 'yes' && (
+              <>
+                <img
+                  className="card-full-img"
+                  src="chat.jpg"
+                  alt=""
+                />
+                <p className="message-success">
+                  Ti es officiellement ma valentine ! YES JE T'AI COFFRE. IHAHAHHAIHIH
+                </p>
+              </>
+            )}
+          </div>
+        </>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
